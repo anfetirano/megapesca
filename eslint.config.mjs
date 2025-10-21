@@ -10,6 +10,7 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  // Configuración base recomendada de Next.js + TypeScript
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     ignores: [
@@ -18,6 +19,7 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
+      "convex/_generated/**", // 👈 añadimos esta línea para silenciar warnings automáticos
     ],
   },
 ];

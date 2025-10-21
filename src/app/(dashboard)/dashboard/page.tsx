@@ -6,12 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/../convex/_generated/api";
 
-const ADMIN_EMAILS = [
-  "info@megapesca.co",
-  // "admin2@megapesca.co",
-  // "admin3@megapesca.co",
-  // "admin4@megapesca.co",
-];
+const ADMIN_EMAILS = ["info@megapesca.co"];
 
 export default function DashboardIndex() {
   const router = useRouter();
@@ -22,14 +17,11 @@ export default function DashboardIndex() {
     return user.primaryEmailAddress.emailAddress.toLowerCase();
   }, [user]);
 
-  const name = user?.fullName || user?.username || undefined;
+  const name = user?.firstName || user?.fullName || user?.username || "pescador/a";
   const image = user?.imageUrl || undefined;
 
   const upsertUser = useMutation(api.functions.users.upsert);
-  const getUser = useQuery(
-    api.functions.users.getByEmail,
-    email ? { email } : "skip"
-  );
+  const getUser = useQuery(api.functions.users.getByEmail, email ? { email } : "skip");
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -42,7 +34,7 @@ export default function DashboardIndex() {
   useEffect(() => {
     (async () => {
       if (!email) return;
-      if (getUser === undefined) return; // cargando
+      if (getUser === undefined) return;
 
       const shouldBeAdmin = ADMIN_EMAILS.includes(email);
       const role = shouldBeAdmin ? "admin" : "client";
@@ -53,12 +45,15 @@ export default function DashboardIndex() {
 
       router.replace(shouldBeAdmin ? "/dashboard/admin" : "/dashboard/client");
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [email, getUser, name, image, upsertUser, router]);
 
   return (
     <main className="min-h-screen bg-black text-white flex items-center justify-center">
-      <p className="text-sm text-zinc-400">Entrando a tu panel…</p>
+      <div className="text-center">
+        <p className="text-sm text-zinc-400">Preparando tu panel…</p>
+        <h1 className="mt-2 text-2xl font-semibold">¡Bienvenido a tu área, {name}!</h1>
+        <p className="mt-1 text-zinc-400 text-sm">En segundos te llevaremos a tu tablero.</p>
+      </div>
     </main>
   );
 }

@@ -19,11 +19,11 @@ export default function Home() {
 
     if (!noRedirect && !already) {
       localStorage.setItem("mp_redirected_once", "1");
+      // RUTA REAL (los route groups no aparecen en la URL)
       router.replace("/first-opportunity");
       return;
     }
 
-    // Mostrar la home normalmente
     setReady(true);
   }, [router]);
 
@@ -65,13 +65,13 @@ export default function Home() {
                 href="/sign-in"
                 className="rounded-md border border-white/20 px-3 py-1.5 text-sm hover:bg-white/10 transition"
               >
-                Sign in
+                Ingresar
               </Link>
               <Link
-                href="/(dashboard)"
+                href="/sign-up"
                 className="rounded-md bg-[#d6a354] text-black font-semibold px-3 py-1.5 text-sm hover:brightness-110 transition"
               >
-                Sign up
+                Registrarse
               </Link>
             </SignedOut>
             <SignedIn>

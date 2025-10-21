@@ -2,7 +2,6 @@
 
 import HeroCarousel from "@/components/launch/HeroCarousel";
 import SubscribeForm from "@/components/launch/SubscribeForm";
-import WelcomeModal from "@/components/launch/WelcomeModal";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -21,8 +20,6 @@ export default function FirstOpportunity() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
-      <WelcomeModal />
-
       {/* HERO FULLSCREEN */}
       <section id="lanzamiento" className="relative h-screen overflow-hidden">
         <HeroCarousel />
@@ -32,8 +29,8 @@ export default function FirstOpportunity() {
           <div
             className="
               relative
-              w-[66vw] max-w-[340px]           /* móvil */
-              sm:w-[27vw] sm:max-w-[460px]      /* desktop */
+              w-[66vw] max-w-[340px]
+              sm:w-[27vw] sm:max-w-[460px]
               aspect-[5/2]
               logo-anim-intro logo-anim-float
             "
