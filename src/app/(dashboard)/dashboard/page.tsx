@@ -33,7 +33,7 @@ export default function DashboardIndex() {
     email ? { email } : "skip"
   );
 
-  // Si no hay sesión, llevar a sign-in 
+  // Si no hay sesión, llevar a sign-in
   useEffect(() => {
     if (!isLoaded) return;
     if (!isSignedIn) {
@@ -62,7 +62,6 @@ export default function DashboardIndex() {
 
       router.replace(shouldBeAdmin ? "/dashboard/admin" : "/dashboard/client");
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [email, getUser, name, image, upsertUser, router]);
 
   return (
@@ -73,7 +72,7 @@ export default function DashboardIndex() {
           ¡Bienvenido a tu área, {name}!
         </h1>
         <p className="mt-1 text-zinc-400 text-sm">
-          En segundos te llevaremos a tu panel Megapesca.
+          En segundos te llevaremos a tu tablero.
         </p>
       </div>
     </main>
