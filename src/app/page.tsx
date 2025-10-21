@@ -19,12 +19,11 @@ export default function Home() {
 
     if (!noRedirect && !already) {
       localStorage.setItem("mp_redirected_once", "1");
-      // RUTA REAL de la promo:
-      router.replace("/promo/first-opportunity");
+      // RUTA REAL (los route groups no aparecen en la URL)
+      router.replace("/first-opportunity");
       return;
     }
 
-    // Mostrar la home normalmente
     setReady(true);
   }, [router]);
 
@@ -34,7 +33,7 @@ export default function Home() {
         <div className="flex flex-col items-center gap-3">
           <p className="text-sm text-zinc-400 animate-pulse">Cargando Megapesca...</p>
           {/* Enlace de respaldo si falla JS */}
-          <Link href="/promo/first-opportunity" className="text-xs text-[#d6a354] underline underline-offset-4">
+          <Link href="/first-opportunity" className="text-xs text-[#d6a354] underline underline-offset-4">
             Ir ahora
           </Link>
         </div>
@@ -57,7 +56,7 @@ export default function Home() {
             <Link href="/trips" className="hover:text-white transition">Viajes</Link>
             <Link href="/blog" className="hover:text-white transition">Blog</Link>
             <Link href="/contact" className="hover:text-white transition">Contáctenos</Link>
-            <Link href="/promo/first-opportunity" className="hover:text-white transition">First-Opportunity</Link>
+            <Link href="/first-opportunity" className="hover:text-white transition">First-Opportunity</Link>
           </nav>
 
           <div className="flex items-center gap-2">
@@ -97,7 +96,7 @@ export default function Home() {
 
         <div className="flex items-center gap-3">
           <Link
-            href="/promo/first-opportunity"
+            href="/first-opportunity"
             className="rounded-md bg-[#d6a354] text-black font-semibold px-5 py-2 hover:brightness-110 transition"
           >
             Ver “first-opportunity”

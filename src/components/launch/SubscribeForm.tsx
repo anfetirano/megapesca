@@ -40,7 +40,6 @@ export default function SubscribeForm() {
     try {
       setLoading(true);
       // Aquí integrarás tu backend/Convex/Sendgrid/etc.
-      // De momento, dejamos un mock:
       console.log("Suscripción:", {
         name,
         email,
@@ -50,16 +49,14 @@ export default function SubscribeForm() {
       });
 
       setOk(true);
-      // limpia si quieres:
       // setName(""); setEmail(""); setWhatsapp(""); setIsClient(""); setJoinWA("");
-    } catch (_err) {
+    } catch {
       setError("Ocurrió un error al enviar. Intenta de nuevo.");
     } finally {
       setLoading(false);
     }
   }
 
-  // estilos base para inputs
   const inputCls =
     "w-full rounded-md bg-white/10 border border-white/15 text-white placeholder:text-zinc-400 h-10 px-3 outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent";
 
@@ -136,9 +133,7 @@ export default function SubscribeForm() {
                 type="checkbox"
                 className="accent-white"
                 checked={isClient === "yes"}
-                onChange={() =>
-                  setIsClient(isClient === "yes" ? "" : "yes")
-                }
+                onChange={() => setIsClient(isClient === "yes" ? "" : "yes")}
               />
               <span>Sí</span>
             </label>

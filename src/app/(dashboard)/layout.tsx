@@ -1,12 +1,13 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { ConvexProvider } from "convex/react";
 import { convex } from "@/lib/convexClient";
 import { UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
@@ -21,7 +22,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
 
           <nav className="space-y-2 text-sm">
-            {/* URLs reales */}
             <Link href="/dashboard/client" className="block hover:text-[#d6a354]">
               🧭 Cliente — Resumen
             </Link>

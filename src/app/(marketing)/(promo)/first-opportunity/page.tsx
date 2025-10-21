@@ -29,8 +29,8 @@ export default function FirstOpportunity() {
           <div
             className="
               relative
-              w-[66vw] max-w-[340px]           /* móvil */
-              sm:w-[27vw] sm:max-w-[460px]      /* desktop */
+              w-[66vw] max-w-[340px]
+              sm:w-[27vw] sm:max-w-[460px]
               aspect-[5/2]
               logo-anim-intro logo-anim-float
             "
