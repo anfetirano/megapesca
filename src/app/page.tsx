@@ -19,7 +19,8 @@ export default function Home() {
 
     if (!noRedirect && !already) {
       localStorage.setItem("mp_redirected_once", "1");
-      router.replace("/first-opportunity");
+      // RUTA REAL de la promo:
+      router.replace("/promo/first-opportunity");
       return;
     }
 
@@ -33,7 +34,7 @@ export default function Home() {
         <div className="flex flex-col items-center gap-3">
           <p className="text-sm text-zinc-400 animate-pulse">Cargando Megapesca...</p>
           {/* Enlace de respaldo si falla JS */}
-          <Link href="/first-opportunity" className="text-xs text-[#d6a354] underline underline-offset-4">
+          <Link href="/promo/first-opportunity" className="text-xs text-[#d6a354] underline underline-offset-4">
             Ir ahora
           </Link>
         </div>
@@ -56,7 +57,7 @@ export default function Home() {
             <Link href="/trips" className="hover:text-white transition">Viajes</Link>
             <Link href="/blog" className="hover:text-white transition">Blog</Link>
             <Link href="/contact" className="hover:text-white transition">Contáctenos</Link>
-            <Link href="/first-opportunity" className="hover:text-white transition">First-Opportunity</Link>
+            <Link href="/promo/first-opportunity" className="hover:text-white transition">First-Opportunity</Link>
           </nav>
 
           <div className="flex items-center gap-2">
@@ -65,13 +66,13 @@ export default function Home() {
                 href="/sign-in"
                 className="rounded-md border border-white/20 px-3 py-1.5 text-sm hover:bg-white/10 transition"
               >
-                Sign in
+                Ingresar
               </Link>
               <Link
-                href="/(dashboard)"
+                href="/sign-up"
                 className="rounded-md bg-[#d6a354] text-black font-semibold px-3 py-1.5 text-sm hover:brightness-110 transition"
               >
-                Sign up
+                Registrarse
               </Link>
             </SignedOut>
             <SignedIn>
@@ -96,7 +97,7 @@ export default function Home() {
 
         <div className="flex items-center gap-3">
           <Link
-            href="/first-opportunity"
+            href="/promo/first-opportunity"
             className="rounded-md bg-[#d6a354] text-black font-semibold px-5 py-2 hover:brightness-110 transition"
           >
             Ver “first-opportunity”
