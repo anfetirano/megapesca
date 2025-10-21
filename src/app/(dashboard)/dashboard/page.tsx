@@ -8,9 +8,6 @@ import { api } from "@/../convex/_generated/api";
 
 const ADMIN_EMAILS = [
   "info@megapesca.co",
-  // "admin2@megapesca.co",
-  // "admin3@megapesca.co",
-  // "admin4@megapesca.co",
 ];
 
 export default function DashboardIndex() {
@@ -31,6 +28,7 @@ export default function DashboardIndex() {
     email ? { email } : "skip"
   );
 
+  // Si no hay sesión, llevar a sign-in
   useEffect(() => {
     if (!isLoaded) return;
     if (!isSignedIn) {
@@ -39,10 +37,11 @@ export default function DashboardIndex() {
     }
   }, [isLoaded, isSignedIn, router]);
 
+  // Upsert + redirección por rol
   useEffect(() => {
     (async () => {
       if (!email) return;
-      if (getUser === undefined) return; // cargando
+      if (getUser === undefined) return; // aún cargando
 
       const shouldBeAdmin = ADMIN_EMAILS.includes(email);
       const role = shouldBeAdmin ? "admin" : "client";

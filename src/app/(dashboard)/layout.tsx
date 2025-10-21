@@ -5,7 +5,7 @@ import { ConvexProvider } from "convex/react";
 import { convex } from "@/lib/convexClient";
 import { UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
 
-export default function DashboardLayout({ children }: { children: ReactNode }) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
@@ -20,10 +20,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           </div>
 
           <nav className="space-y-2 text-sm">
-            <a href="/(dashboard)/client" className="block hover:text-[#d6a354]">
+            {/* URLs reales */}
+            <a href="/dashboard/client" className="block hover:text-[#d6a354]">
               🧭 Cliente — Resumen
             </a>
-            <a href="/(dashboard)/admin" className="block hover:text-[#d6a354]">
+            <a href="/dashboard/admin" className="block hover:text-[#d6a354]">
               🛠️ Admin — Resumen
             </a>
 
