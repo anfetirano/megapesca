@@ -52,7 +52,7 @@ export default function SubscribeForm() {
       setOk(true);
       // limpia si quieres:
       // setName(""); setEmail(""); setWhatsapp(""); setIsClient(""); setJoinWA("");
-    } catch (err) {
+    } catch (_err) {
       setError("Ocurrió un error al enviar. Intenta de nuevo.");
     } finally {
       setLoading(false);
