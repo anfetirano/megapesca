@@ -19,7 +19,12 @@ export default function DashboardIndex() {
     return user.primaryEmailAddress.emailAddress.toLowerCase();
   }, [user]);
 
-  const name = user?.fullName || user?.username || undefined;
+  const name =
+    user?.firstName ||
+    user?.fullName ||
+    user?.username ||
+    "pescador/a";
+
   const image = user?.imageUrl || undefined;
 
   const upsertUser = useMutation(api.functions.users.upsert);
@@ -28,7 +33,7 @@ export default function DashboardIndex() {
     email ? { email } : "skip"
   );
 
-  // Si no hay sesión, llevar a sign-in
+  // Si no hay sesión, llevar a sign-in 
   useEffect(() => {
     if (!isLoaded) return;
     if (!isSignedIn) {
@@ -46,7 +51,12 @@ export default function DashboardIndex() {
       const shouldBeAdmin = ADMIN_EMAILS.includes(email);
       const role = shouldBeAdmin ? "admin" : "client";
 
-      if (!getUser || getUser.role !== role || getUser.name !== name || getUser.image !== image) {
+      if (
+        !getUser ||
+        getUser.role !== role ||
+        getUser.name !== name ||
+        getUser.image !== image
+      ) {
         await upsertUser({ email, name, image, role });
       }
 
@@ -57,7 +67,15 @@ export default function DashboardIndex() {
 
   return (
     <main className="min-h-screen bg-black text-white flex items-center justify-center">
-      <p className="text-sm text-zinc-400">Entrando a tu panel…</p>
+      <div className="text-center">
+        <p className="text-sm text-zinc-400">Preparando tu panel…</p>
+        <h1 className="mt-2 text-2xl font-semibold">
+          ¡Bienvenido a tu área, {name}!
+        </h1>
+        <p className="mt-1 text-zinc-400 text-sm">
+          En segundos te llevaremos a tu panel Megapesca.
+        </p>
+      </div>
     </main>
   );
 }
