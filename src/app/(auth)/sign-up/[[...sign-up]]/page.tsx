@@ -1,5 +1,4 @@
 "use client";
-
 import { SignUp } from "@clerk/nextjs";
 
 export default function SignUpPage() {
@@ -11,8 +10,8 @@ export default function SignUpPage() {
           <SignUp
             routing="path"
             path="/sign-up"
-            redirectUrl="/dashboard"
-            afterSignUpUrl="/dashboard"
+            // redirectUrl (DEPRECATED) -> quitar
+            afterSignUpUrl="/dashboard"   // ✅
             signInUrl="/sign-in"
             appearance={{
               variables: { colorPrimary: "#d6a354" },

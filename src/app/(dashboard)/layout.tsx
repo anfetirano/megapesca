@@ -1,8 +1,10 @@
+// src/app/(dashboard)/layout.tsx
 "use client";
 
 import { ReactNode, useEffect, useState } from "react";
 import { UserButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import ConvexClientProvider from "@/components/ConvexClientProvider";
+import Link from "next/link";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
@@ -16,7 +18,6 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <ConvexClientProvider>
       <div className="min-h-screen bg-black text-white grid grid-cols-1 lg:grid-cols-[240px_1fr]">
-
         {/* SIDEBAR */}
         <aside className="border-r border-white/10 p-4 bg-black/70 flex flex-col justify-between">
           <div>
@@ -26,12 +27,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             </div>
 
             <nav className="space-y-2 text-sm">
-              <a href="/dashboard/client" className="block hover:text-[#d6a354] transition">
+              <Link href="/dashboard/client" className="block hover:text-[#d6a354] transition">
                 🧭 Cliente — Resumen
-              </a>
-              <a href="/dashboard/admin" className="block hover:text-[#d6a354] transition">
+              </Link>
+              <Link href="/dashboard/admin" className="block hover:text-[#d6a354] transition">
                 🛠️ Admin — Resumen
-              </a>
+              </Link>
             </nav>
           </div>
 
@@ -53,12 +54,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 <UserButton afterSignOutUrl="/" />
               </SignedIn>
               <SignedOut>
-                <a
+                <Link
                   href="/sign-in"
                   className="text-sm rounded-md border border-white/20 px-3 py-1 hover:bg-white/10 transition"
                 >
                   Iniciar sesión
-                </a>
+                </Link>
               </SignedOut>
             </div>
           </header>

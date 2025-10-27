@@ -1,5 +1,4 @@
 "use client";
-
 import { SignIn } from "@clerk/nextjs";
 
 export default function SignInPage() {
@@ -11,8 +10,8 @@ export default function SignInPage() {
           <SignIn
             routing="path"
             path="/sign-in"
-            redirectUrl="/dashboard"
-            afterSignInUrl="/dashboard"
+            // redirectUrl (DEPRECATED) -> quitar
+            afterSignInUrl="/dashboard"   // ✅
             appearance={{
               variables: { colorPrimary: "#d6a354" },
               layout: { socialButtonsVariant: "iconButton" },
