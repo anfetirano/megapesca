@@ -3,12 +3,18 @@ import { v } from "convex/values";
 
 export default defineSchema({
   users: defineTable({
-    email: v.string(),
+    // 🔁 MIGRACIÓN SUAVE: lo dejamos opcional temporalmente
+    clerkId: v.optional(v.string()),
+    email: v.optional(v.string()),
     name: v.optional(v.string()),
     image: v.optional(v.string()),
     role: v.union(v.literal("client"), v.literal("admin")),
     createdAt: v.number(),
-  }).index("by_email", ["email"]),
+  })
+    // Usuarios con clerkId aparecerán en este índice;
+    // los antiguos sin clerkId simplemente no estarán indexados aquí.
+    .index("by_clerkId", ["clerkId"])
+    .index("by_email", ["email"]),
 
   orders: defineTable({
     userId: v.id("users"),
@@ -17,7 +23,9 @@ export default defineSchema({
     currency: v.string(),
     status: v.string(),
     createdAt: v.number(),
-  }).index("by_user", ["userId"]).index("by_shopifyOrderId", ["shopifyOrderId"]),
+  })
+    .index("by_user", ["userId"])
+    .index("by_shopifyOrderId", ["shopifyOrderId"]),
 
   captures: defineTable({
     userId: v.id("users"),
@@ -28,7 +36,9 @@ export default defineSchema({
     lengthCm: v.optional(v.number()),
     notes: v.optional(v.string()),
     imageUrl: v.optional(v.string()),
-  }).index("by_user", ["userId"]).index("by_date", ["date"]),
+  })
+    .index("by_user", ["userId"])
+    .index("by_date", ["date"]),
 
   gear: defineTable({
     userId: v.id("users"),
@@ -50,5 +60,7 @@ export default defineSchema({
     status: v.union(v.literal("open"), v.literal("closed")),
     createdAt: v.number(),
     updatedAt: v.number(),
-  }).index("by_user", ["userId"]).index("by_status", ["status"]),
+  })
+    .index("by_user", ["userId"])
+    .index("by_status", ["status"]),
 });

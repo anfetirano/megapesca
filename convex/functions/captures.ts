@@ -1,29 +1,34 @@
-import { query, mutation } from "../_generated/server";
-import { v } from "convex/values";
+import { query } from "../_generated/server";
 
-export const listByUser = query({
-  args: { userId: v.id("users") },
-  handler: async (ctx, { userId }) => {
+export const listMine = query({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return [];
+
+    // 1) por clerkId
+    let me =
+      await ctx.db
+        .query("users")
+        .withIndex("by_clerkId", (q: any) => q.eq("clerkId", identity.subject))
+        .unique();
+
+    // 2) fallback por email (si existe)
+    if (!me) {
+      const emailLower = identity.email?.toLowerCase();
+      if (emailLower) {
+        me = await ctx.db
+          .query("users")
+          .withIndex("by_email", (q: any) => q.eq("email", emailLower))
+          .unique();
+      }
+    }
+
+    if (!me) return [];
     return await ctx.db
       .query("captures")
-      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .withIndex("by_user", (q) => q.eq("userId", me._id))
       .order("desc")
       .collect();
-  },
-});
-
-export const create = mutation({
-  args: {
-    userId: v.id("users"),
-    date: v.number(), // Date.now()
-    location: v.string(),
-    species: v.string(),
-    weightKg: v.optional(v.number()),
-    lengthCm: v.optional(v.number()),
-    notes: v.optional(v.string()),
-    imageUrl: v.optional(v.string()),
-  },
-  handler: async (ctx, args) => {
-    return await ctx.db.insert("captures", args);
   },
 });

@@ -1,58 +1,71 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useConvexAuth, useMutation, useQuery } from "convex/react";
 import { useUser } from "@clerk/nextjs";
-import { useMutation, useQuery } from "convex/react";
 import { api } from "@/../convex/_generated/api";
 
-const ADMIN_EMAILS = ["info@megapesca.co"];
-
-export default function DashboardIndex() {
+export default function DashboardPage() {
   const router = useRouter();
-  const { user, isLoaded, isSignedIn } = useUser();
+  const { isAuthenticated, isLoading } = useConvexAuth();
+  const { user, isLoaded } = useUser();
 
-  const email = useMemo(() => {
-    if (!user?.primaryEmailAddress) return null;
-    return user.primaryEmailAddress.emailAddress.toLowerCase();
-  }, [user]);
+  // estado de mensajes
+  const [message, setMessage] = useState("Validando tu sesión…");
 
-  const name = user?.firstName || user?.fullName || user?.username || "pescador/a";
-  const image = user?.imageUrl || undefined;
+  // mutación principal
+  const ensureMe = useMutation(api.functions.users.ensureMe);
 
-  const upsertUser = useMutation(api.functions.users.upsert);
-  const getUser = useQuery(api.functions.users.getByEmail, email ? { email } : "skip");
+  // query de identidad
+  const whoami = useQuery(
+    api.functions.users.whoami,
+    isAuthenticated ? {} : "skip"
+  );
 
+  // efecto principal
   useEffect(() => {
-    if (!isLoaded) return;
-    if (!isSignedIn) {
-      router.replace("/sign-in");
-      return;
-    }
-  }, [isLoaded, isSignedIn, router]);
-
-  useEffect(() => {
-    (async () => {
-      if (!email) return;
-      if (getUser === undefined) return;
-
-      const shouldBeAdmin = ADMIN_EMAILS.includes(email);
-      const role = shouldBeAdmin ? "admin" : "client";
-
-      if (!getUser || getUser.role !== role || getUser.name !== name || getUser.image !== image) {
-        await upsertUser({ email, name, image, role });
+    async function run() {
+      // Esperar que Clerk y Convex estén listos
+      if (!isLoaded || isLoading) return;
+      if (!isAuthenticated) {
+        router.push("/sign-in");
+        return;
       }
 
-      router.replace(shouldBeAdmin ? "/dashboard/admin" : "/dashboard/client");
-    })();
-  }, [email, getUser, name, image, upsertUser, router]);
+      setMessage("Preparando tu panel…");
+
+      try {
+        // Garantiza que el usuario exista en Convex
+        await ensureMe();
+
+        // Si ya tenemos el doc de usuario
+        if (whoami) {
+          const role = whoami.role;
+          const name = whoami.name || user?.fullName || "Usuario";
+
+          setMessage(`Bienvenido, ${name}`);
+
+          // Pequeño delay visual
+          setTimeout(() => {
+            if (role === "admin") router.push("/dashboard/admin");
+            else router.push("/dashboard/client");
+          }, 1200);
+        }
+      } catch (error) {
+        console.error("Error al inicializar dashboard:", error);
+        setMessage("Error al conectar. Intenta de nuevo.");
+      }
+    }
+
+    run();
+  }, [isAuthenticated, isLoaded, isLoading, whoami, user, ensureMe, router]);
 
   return (
-    <main className="min-h-screen bg-black text-white flex items-center justify-center">
-      <div className="text-center">
-        <p className="text-sm text-zinc-400">Preparando tu panel…</p>
-        <h1 className="mt-2 text-2xl font-semibold">¡Bienvenido a tu área, {name}!</h1>
-        <p className="mt-1 text-zinc-400 text-sm">En segundos te llevaremos a tu tablero.</p>
+    <main className="min-h-screen flex flex-col items-center justify-center bg-black text-white">
+      <div className="text-center space-y-3">
+        <h1 className="text-2xl font-bold tracking-wide">{message}</h1>
+        <p className="text-sm text-zinc-400">Megapesca Dashboard</p>
       </div>
     </main>
   );

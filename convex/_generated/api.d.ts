@@ -13,7 +13,9 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as functions__auth from "../functions/_auth.js";
 import type * as functions_captures from "../functions/captures.js";
+import type * as functions_debug from "../functions/debug.js";
 import type * as functions_orders from "../functions/orders.js";
 import type * as functions_users from "../functions/users.js";
 
@@ -26,7 +28,9 @@ import type * as functions_users from "../functions/users.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  "functions/_auth": typeof functions__auth;
   "functions/captures": typeof functions_captures;
+  "functions/debug": typeof functions_debug;
   "functions/orders": typeof functions_orders;
   "functions/users": typeof functions_users;
 }>;

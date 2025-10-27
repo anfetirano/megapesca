@@ -1,57 +1,72 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
-import { ConvexProvider } from "convex/react";
-import { convex } from "@/lib/convexClient";
-import { UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
-import Link from "next/link";
+import { ReactNode, useEffect, useState } from "react";
+import { UserButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import ConvexClientProvider from "@/components/ConvexClientProvider";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
+  const { user, isLoaded } = useUser();
+
   useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
+  if (!mounted || !isLoaded) return null;
+
+  const userName = user?.fullName?.split(" ")[0] || "Usuario";
 
   return (
-    <ConvexProvider client={convex}>
+    <ConvexClientProvider>
       <div className="min-h-screen bg-black text-white grid grid-cols-1 lg:grid-cols-[240px_1fr]">
-        <aside className="border-r border-white/10 p-4 bg-black/70">
-          <div className="mb-4">
-            <h2 className="text-lg font-semibold">Megapesca — Panel</h2>
-            <p className="text-xs text-zinc-400">Área privada</p>
+
+        {/* SIDEBAR */}
+        <aside className="border-r border-white/10 p-4 bg-black/70 flex flex-col justify-between">
+          <div>
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-[#d6a354]">Megapesca</h2>
+              <p className="text-xs text-zinc-400">Panel privado</p>
+            </div>
+
+            <nav className="space-y-2 text-sm">
+              <a href="/dashboard/client" className="block hover:text-[#d6a354] transition">
+                🧭 Cliente — Resumen
+              </a>
+              <a href="/dashboard/admin" className="block hover:text-[#d6a354] transition">
+                🛠️ Admin — Resumen
+              </a>
+            </nav>
           </div>
 
-          <nav className="space-y-2 text-sm">
-            <Link href="/dashboard/client" className="block hover:text-[#d6a354]">
-              🧭 Cliente — Resumen
-            </Link>
-            <Link href="/dashboard/admin" className="block hover:text-[#d6a354]">
-              🛠️ Admin — Resumen
-            </Link>
-
-            <div className="mt-4 pt-4 border-t border-white/10 text-xs text-zinc-400">
-              (Protegido con Clerk)
-            </div>
-          </nav>
+          <div className="text-xs text-zinc-500 mt-6 border-t border-white/10 pt-3">
+            Protegido con Clerk + Convex
+          </div>
         </aside>
 
-        <main className="p-6">
-          <div className="flex items-center justify-end mb-4">
-            <SignedIn>
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
-            <SignedOut>
-              <Link
-                href="/sign-in"
-                className="text-sm rounded-md border border-white/20 px-3 py-1 hover:bg-white/10 transition"
-              >
-                Ingresar
-              </Link>
-            </SignedOut>
-          </div>
+        {/* MAIN */}
+        <main className="p-6 relative overflow-hidden">
+          {/* HEADER SUPERIOR */}
+          <header className="flex items-center justify-between mb-8 border-b border-white/10 pb-4">
+            <h1 className="text-xl font-semibold tracking-wide">
+              👋 Hola, <span className="text-[#d6a354]">{userName}</span>
+            </h1>
+
+            <div className="flex items-center gap-3">
+              <SignedIn>
+                <UserButton afterSignOutUrl="/" />
+              </SignedIn>
+              <SignedOut>
+                <a
+                  href="/sign-in"
+                  className="text-sm rounded-md border border-white/20 px-3 py-1 hover:bg-white/10 transition"
+                >
+                  Iniciar sesión
+                </a>
+              </SignedOut>
+            </div>
+          </header>
+
+          {/* CONTENIDO */}
           {children}
         </main>
       </div>
-    </ConvexProvider>
+    </ConvexClientProvider>
   );
 }
