@@ -7,7 +7,7 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default function Home() {
   const router = useRouter();
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(false);             
 
   useEffect(() => {
     // Permitir anular redirección con ?noredirect=1
